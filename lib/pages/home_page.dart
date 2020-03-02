@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:online_shopper/services/api/ebay_api.dart';
 import 'package:online_shopper/services/models/item_summary.dart';
 import 'package:online_shopper/services/response/item_search_response.dart';
@@ -55,34 +56,7 @@ class _HomePageState extends State<HomePage> {
       child: new ListView.builder(
           itemCount: (_searchListItems != null) ? _searchListItems.length : 0,
           itemBuilder: (BuildContext context, int index) {
-            return new Card(
-              color: Colors.white,
-              elevation: 5.0,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Container(
-                    color: Colors.grey,
-                    height: 90.0,
-                    width: 60.0,
-                    child: (_searchListItems[index].image != null)
-                        ? Image.network(
-                            "${_searchListItems[index].image.imageUrl}")
-                        : Container(
-                            margin: EdgeInsets.all(10.0),
-                            color: Colors.grey,
-                            height: 90.0,
-                            width: 60.0,
-                          ),
-                  ),
-                  Flexible(
-                    child: Container(
-                        margin: EdgeInsets.all(5.0),
-                        child: Text("${_searchListItems[index].title}")),
-                  ),
-                ],
-              ),
-            );
+            return _getSearchItemCardView(index);
           }),
     );
   }
@@ -102,6 +76,50 @@ class _HomePageState extends State<HomePage> {
               findItem(searchKeyWords);
             },
           )),
+    );
+  }
+
+  Widget _getSearchItemCardView(int index) {
+    return Card(
+      color: Colors.white,
+      elevation: 5.0,
+      child: Row(
+        children: <Widget>[
+          Container(
+            height: 90.0,
+            width: 80.0,
+            child: (_searchListItems[index].image != null)
+                ? Image.network("${_searchListItems[index].image.imageUrl}")
+                : Container(
+                    margin: EdgeInsets.all(10.0),
+                    color: Colors.grey,
+                    height: 90.0,
+                    width: 80.0,
+                  ),
+          ),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Container(
+                    margin: EdgeInsets.all(5.0),
+                    child: Text(
+                      "${_searchListItems[index].title}",
+                      style: TextStyle(
+                          color: Colors.black54, fontStyle: FontStyle.normal),
+                      overflow: TextOverflow.clip,
+                    )),
+                Container(
+                    margin: EdgeInsets.all(5.0),
+                    child: Text(
+                        "${_searchListItems[index].price.currency} ${_searchListItems[index].price.value}")),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 

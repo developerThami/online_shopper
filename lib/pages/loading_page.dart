@@ -11,7 +11,6 @@ class LoadingPage extends StatefulWidget {
 }
 
 class _LoadingPageState extends State<LoadingPage> {
-
   var logger = Logger();
 
   @override
@@ -26,13 +25,13 @@ class _LoadingPageState extends State<LoadingPage> {
     super.initState();
   }
 
-  void authenticateApplication() {
-
+  void authenticateApplication() async {
     var ebayApi = EbayApi(EbayApi.setAuthHeaders());
-    var scope = "https://api.ebay.com/oauth/api_scope https://api.ebay.com/oauth/api_scope/buy.item.feed https://api.ebay.com/oauth/api_scope/buy.product.feed";
+    var scope =
+        "https://api.ebay.com/oauth/api_scope https://api.ebay.com/oauth/api_scope/buy.item.feed https://api.ebay.com/oauth/api_scope/buy.product.feed";
     var grantType = "client_credentials";
 
-    ebayApi
+    await ebayApi
         .authenticate(grantType, scope)
         .then((response) => saveToken(response.accessToken))
         .catchError((Object obj) {
